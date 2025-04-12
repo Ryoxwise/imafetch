@@ -1,0 +1,14 @@
+# Comando para buscar y ordenar archivos de medios (imagenes, videos, etc)
+
+1. Usar el comando "find" para encontrar los archivos especificos:
+	find [path] -type f -iregex '.*\.\(jpg\|jpeg\|png\|gif\|bmp\|tiff\|webp\)$'
+
+2. Localizar la fecha de modificacion de cada archivo y ordenarlos segun esa fecha
+	head -n 10 output.txt | sed 's/ /\\ /g' | xargs stat | grep "Modify" | awk '{print $2}' | sort
+
+3. Agrupar fotos por month & year
+
+4. Identificar si el nombre de archivo tiene una fecha en el nombre (priorizar sobre la fecha de modificacion)
+
+NOTA: 
+No se puede usar la fecha de creacion del archivo (En el output del comando stat aparece como "Birth"), ya que entre las copias este valor se sobrescribe a una fecha mas reciente.

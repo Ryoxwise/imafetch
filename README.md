@@ -1,2 +1,2 @@
-# imafetch
-Bash script for file organisation
+# Image Fetcher (Imafetch)
+A bash script for file organisation
