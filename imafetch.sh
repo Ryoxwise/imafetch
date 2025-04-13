@@ -29,21 +29,20 @@ function checkPath(){
   local -i iter=1
   
   #echo "ending directory: $dir"
-
-  if [ $override = "true" ]; then
-    outDir="$dir"
+  outDir="$dir"
+  if [ "$override" = "true" ]; then
     while [ -d "$outDir" ]; do
       #echo "$outDir exists" 
       outDir="${dir}_${iter}"
       let iter++
     done
+    mkdir $outDir
   elif [ ! -d "$dir" ]; then
     #echo "$outDir does not exist"
-    outDir="$dir"
-  fi
-  
-  mkdir $outDir
-  echo $outDir 
+    mkdir "$outDir"
+  fi 
+
+  echo "$outDir"
 }
 
 # Global variable to store the found files' paths
@@ -65,8 +64,13 @@ function fetch(){
   echo -e "> Fetching [image] files from $targetD"
 
   # Get all the file paths using the command [find]
-  find $targetD -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.bmp" -o -iname "*.tiff" -o -iname "*.webp" \) 2>/dev/null > .fetched.txt
-  
+  find $targetD -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.bmp" -o -iname "*.tiff" -o -iname "*.webp" -o -iname "*.jfif" \) 2>/dev/null > .fetched.txt
+ 
+  if [ $(cat .fetched.txt | wc -l) -eq 0 ]; then
+    echo -e "\n[!] No files found - Terminating program..."
+    exit 2
+  fi
+
   #echo "$fetchResult"
   echo -e "> Fetch complete - Proceed to data extraction\n"
   
@@ -99,7 +103,7 @@ function fetch(){
 
   fileIndex=1
 
-  local endPath=$(checkPath "$(pwd)/relocated" true)
+  local outPath=$(checkPath "$(pwd)/relocated" true)
 
   for i in $(seq 1 $(cat .fetched.txt | wc -l)); do
     printf "\r[+] Relocating files [%3d/$(cat .fetched.txt | wc -l)] - Please wait..." "$((fileIndex))"
@@ -111,14 +115,28 @@ function fetch(){
     local imageDate=$(stat "$origin" | grep "Modify" | awk '{print $2}')
     local imageYear=$(echo $imageDate | tr '-' ' ' | awk '{print $1}')
     local imageMonth=$(echo $imageDate | tr '-' ' ' | awk '{print $2}')
-   
+    local endPath="$outPath"
+  
     #Generate new filepath and move file
+    #echo "${endPath}"
+    if [ $dSplit = true ]; then
+      endPath=$(checkPath "${endPath}/${imageYear}")
+      endPath=$(checkPath "${endPath}/${imageMonth}")
+    fi
+    if [ $nRename = false ]; then
+      endName="[${imageDate}]-${startName}"
+    else
+      endName="${startName}"
+    fi
+
+    #echo "${endPath}/${endName}"
+    mv "${origin}" "${endPath}/${endName}"
 
     let fileIndex++
   done
   printf "\n\n"
 
-  echo -e "> Files relocated successfully at $endPath"
+  echo -e "> Files relocated successfully at $outPath"
   echo -e "> Terminating program..."
 }
 
@@ -126,6 +144,7 @@ function fetch(){
 # [These are used to run syntax checks and drive the output of the script]
 
 runHelp=false
+runMain=false
 #TargetDirectory is by default set to user's current directory
 targetDirectory="$(pwd)"
 outputDirectory="$(pwd)"
@@ -133,20 +152,24 @@ FormSplit=false
 DateSplit=false
 NoRename=false
 #Numerical variable used to check if a wrong parameter combination is used
-declare -i syn=0
+#declare -i syn=0
 
 while getopts "d:smnh" arg; do
   case "$arg" in
     d)  targetDirectory=$OPTARG 
+        runMain=true
     ;;
     s)  FormSplit=true
+        runMain=true
     ;;
     m)  DateSplit=true
+        runMain=true
     ;;
     n)  NoRename=true
+        runMain=true
     ;;
     h)  runHelp=true
-        let syn++
+        #let syn++
     ;;
     *)  echo "Syntax Error. Use \"-h\" for help"
         exit 2
@@ -154,13 +177,13 @@ while getopts "d:smnh" arg; do
   esac
 done
 
-let syn++
+#let syn++
 
 # Currently, $syn must be equal to "1" run the script.
 # If true, then the user has made a correct use of the syntax
 # This prevents the help function to be called if the main script function is being used
 
-if [ $syn -gt 1 ]; then
+if [[ $runMain = true && $runHelp = true ]]; then
   echo "Syntax Error. Unexpected use of parameters. Use \"-h\" for help"
   exit 1
 fi
