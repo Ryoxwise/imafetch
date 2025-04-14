@@ -66,10 +66,10 @@ function fetch(){
   # Get all the file paths using the command [find]
   #find $targetD -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.bmp" -o -iname "*.tiff" -o -iname "*.webp" -o -iname "*.jfif" \) 2>/dev/null > .fetched.txt
   #New find command for IMAGES
-  find $targetD -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.bmp" -o -iname "*.tiff" -o -iname "*.webp" -o -iname "*.jfif" -o -iname "*.tif" -o -iname "*.svg" \) 2>/dev/null > .fetched.txt
+  #find $targetD -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.bmp" -o -iname "*.tiff" -o -iname "*.webp" -o -iname "*.jfif" -o -iname "*.tif" -o -iname "*.svg" \) 2>/dev/null > .fetched.txt
   
   #New find command for DOCUMENTS
-  #find $targetD -type f \( \ -iname "*.doc" -o -iname "*.docx" -o -iname "*.dotm" -o -iname "*.dotx" -o -iname "*.xls" -o -iname "*.xlsx" -o -iname "*.xlr" -o -iname "*.wb2" -o -iname "*.wk4" -o -iname "*.ppt" -o -iname "*.pptx" -o -iname "*.pptm" -o -iname "*.pps" -o -iname "*.ppsx" -o -iname "*.dps" -o -iname "*.odt" -o -iname "*.ods" -o -iname "*.odp" -o -iname "*.odb" -o -iname "*.odt#" -o -iname "*.one" -o -iname "*.onetoc2" -o -iname "*.pdf" -o -iname "*.rtf" -o -iname "*.txt" -o -iname "*.pub" -o -iname "*.mdb" -o -iname "*.xps" -o -iname "*.rar" -o -iname "*.zip" -o -iname "*.prn" -o -iname "*.csv" -o -iname "*.tsv" \) 2>/dev/null > .fetched.txt
+  find $targetD -type f \( \ -iname "*.doc" -o -iname "*.docx" -o -iname "*.dotm" -o -iname "*.dotx" -o -iname "*.xls" -o -iname "*.xlsx" -o -iname "*.xlr" -o -iname "*.wb2" -o -iname "*.wk4" -o -iname "*.ppt" -o -iname "*.pptx" -o -iname "*.pptm" -o -iname "*.pps" -o -iname "*.ppsx" -o -iname "*.dps" -o -iname "*.odt" -o -iname "*.ods" -o -iname "*.odp" -o -iname "*.odb" -o -iname "*.odt#" -o -iname "*.one" -o -iname "*.onetoc2" -o -iname "*.pdf" -o -iname "*.rtf" -o -iname "*.txt" -o -iname "*.pub" -o -iname "*.mdb" -o -iname "*.xps" -o -iname "*.rar" -o -iname "*.zip" -o -iname "*.prn" -o -iname "*.csv" -o -iname "*.tsv" \) 2>/dev/null > .fetched.txt
 
   #New find command for AUDIO
   #find $targetD -type f \( -iname "*.mp3" -o -iname "*.wav" -o -iname "*.wma" -o -iname "*.m4a" -o -iname "*.ogg" -o -iname "*.flac" -o -iname "*.aac" -o -iname "*.mid" -o -iname "*.cda" \) 2>/dev/null > .fetched.txt
